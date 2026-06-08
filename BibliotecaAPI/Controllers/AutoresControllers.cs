@@ -17,11 +17,17 @@ namespace BibliotecaAPI.Controllers
             this.context = context;
         }
 
+        #region Get()
+
         [HttpGet]
         public async Task<IEnumerable<Autor>> Get()
         {
             return await context.Autores.ToListAsync();
         }
+
+        #endregion
+
+        #region Get(int id)
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Autor>> Get(int id)
@@ -36,6 +42,22 @@ namespace BibliotecaAPI.Controllers
             return autor;
         }
 
+        #endregion
+
+        #region GetPrimerAutor()
+
+        [HttpGet("primero")]
+        public async Task<Autor> GetPrimerAutor()
+        {
+            return await context.Autores
+                .Include(x => x.Libros)
+                .FirstAsync();
+        }
+
+        #endregion
+
+        #region Post(Autor autor)
+
         [HttpPost]
         public async Task<ActionResult> Post(Autor autor)
         {
@@ -43,6 +65,11 @@ namespace BibliotecaAPI.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
+
+        #endregion
+
+        #region [HttpPut("{id:int}")]
+
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(int id, Autor autor)
         {
@@ -54,6 +81,11 @@ namespace BibliotecaAPI.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
+
+        #endregion
+
+        #region [HttpDelete("{id:int}")]
+
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -64,5 +96,8 @@ namespace BibliotecaAPI.Controllers
             }
             return Ok();
         }
+
+        #endregion
+
     }
 }
